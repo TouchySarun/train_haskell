@@ -1,3 +1,6 @@
+module SPR_Module
+    where
+
 import System.Random
 
 random_spr = do
