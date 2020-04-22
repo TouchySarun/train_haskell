@@ -1,20 +1,7 @@
-import Control.Monad (when)
-import System.IO
-import Data.Char
+module Save_Load
+    where
 
-data Table_status = Table_status { 
-    table_size_x :: Int ,
-    table_size_y :: Int ,
-    head_black :: Int ,
-    tail_black :: Int ,
-    head_red :: Int ,
-    tail_red :: Int ,
-    game_over :: Int ,
-    turn :: Int ,
-    size :: Int 
-    }deriving (Show)
-
-temp = Table_status 0 1 2 3 4 5 6 7 8 
+import Table_status
 
 save status = do
     let string_save = show (table_size_x status) ++ "\n" ++ show (table_size_y status) ++ "\n" ++ show (head_black status)

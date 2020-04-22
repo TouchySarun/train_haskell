@@ -1,29 +1,16 @@
 
 import Get_input
 import SPR_Module
+import Save_Load
+import Table_status
 
-data Table_status = Table_status { 
-    table_size_x :: Int ,
-    table_size_y :: Int ,
-    head_black :: Int ,
-    tail_black :: Int ,
-    head_red :: Int ,
-    tail_red :: Int ,
-    game_over :: Int ,
-    turn :: Int ,
-    size :: Int 
-    }deriving (Show)
-
-
-load_file = Table_status 0 1 2 3 4 5 6 7 8 
-
-gameover table = False
+gameover table = True
 
 gen_table _ _ table = table
 
 
 start_game = do
-    let table_status = load_file
+    table_status <- load
     if gameover table_status
     then 
         do
