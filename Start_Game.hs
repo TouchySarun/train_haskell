@@ -1,9 +1,10 @@
-
 import Get_input
 import SPR_Module
 import Save_Load
 import Show
 import Table_status
+
+import System.IO 
 
 -- game_over = 1 return true else return false
 -- gameover table = True
@@ -16,30 +17,73 @@ gen_table length high = Table_status (length) (high) (length + high - 1) ((2*len
 
 
 start_game = do
-    table_status <- load
+   
+    --Load File
+    readHandle <- openFile "save.txt" ReadMode
+    contents <- hGetContents readHandle
+    seq contents (return ())
+
+    let new = words contents
+    let newer = map (\x -> read x::Int) new
+    let table_status = Table_status (newer!!0) (newer!!1) (newer!!2) (newer!!3) (newer!!4) (newer!!5) (newer!!6) (newer!!7) (newer!!8)
+
+    --hClose readHandle
+    --End Load
+
     if gameover table_status 
     then 
-        do
-        getlong <- get_long
-        gethigh <- get_high
-        let table_status = gen_table getlong gethigh
+        do 
         print "Gen Game"
-        -- start_game
+        hClose readHandle --Close File Before
+
+        getlong <- get_long
+        gethigh <- get_high 
+        let table_status = gen_table getlong gethigh
+        show_table table_status
+
+        --Save File
+        writeHandle <- openFile "save.txt" WriteMode
+        hPutStr writeHandle (normalize_save table_status)
+        hClose writeHandle
+        --End Save
     else
         return()
-    getchoice <- get_choice
-    randomSPR <- random_spr
-    let ck = spr getchoice randomSPR
-    print randomSPR
+    hClose readHandle --Close File Before
+    let loop = do
+
+        --Load File
+        readHandle <- openFile "save.txt" ReadMode
+        contents <- hGetContents readHandle
+        seq contents (return ())
+
+        let new = words contents
+        let newer = map (\x -> read x::Int) new
+        let table_status = Table_status (newer!!0) (newer!!1) (newer!!2) (newer!!3) (newer!!4) (newer!!5) (newer!!6) (newer!!7) (newer!!8)
+
+        --End Load
+
+        getchoice <- get_choice
+        randomSPR <- random_spr
+        let ck = spr getchoice randomSPR
+        print randomSPR
         -- let tb <- table_status
-    let table_status' = update_table ck table_status
-    print table_status
-    show_table table_status'
-    save table_status'
-    case gameover table_status' of
-        False -> start_game
-        True -> show_Gameover
-   -- start the first iteration
+        let table_status' = update_table ck table_status
+        show_table table_status'
+
+        --Save File
+        seq contents (writeFile "save.txt" (normalize_save table_status'))
+        hClose readHandle
+        --End Save
+        
+        case gameover table_status' of
+            False -> loop
+            True -> show_Gameover
+    loop
+
+
+normalize_save status = show (table_size_x status) ++ "\n" ++ show (table_size_y status) ++ "\n" ++ show (head_black status)
+                        ++ "\n" ++ show (tail_black status) ++ "\n" ++ show (head_red status) ++ "\n" ++ show (tail_red status)
+                        ++ "\n" ++ show (game_over status) ++ "\n" ++ show (turn status) ++ "\n" ++ show (size status)
 
 update_table ck tb 
     | ck == "lose" = Table_status (table_size_x tb) (table_size_y tb) (head_black tb) (move_lose_tail (tail_black tb) (head_red tb) (size tb)) (move_win_head (head_red tb) (size tb)) (move_win_tail (tail_red tb) (head_red tb) (tail_black tb) (size tb)) (game_over tb) ((turn tb)+1) (size tb)
