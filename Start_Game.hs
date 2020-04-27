@@ -1,4 +1,3 @@
-
 import Get_input
 import SPR_Module
 import Save_Load
@@ -50,6 +49,7 @@ start_game = do
         --End Save
     else
         return()
+    hClose readHandle --Close File Before
     let loop = do
 
         --Load File
