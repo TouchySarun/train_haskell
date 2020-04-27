@@ -8,6 +8,7 @@ import Table_status
 -- gameover table = True
 gameover table
     | (head_black table) == (head_red table) = True
+    | (turn table) == 200 = True
     | otherwise = False
 
 --gen_table _ _ table = table
