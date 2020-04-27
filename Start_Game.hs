@@ -2,6 +2,7 @@
 import Get_input
 import SPR_Module
 import Save_Load
+import Show
 import Table_status
 
 -- game_over = 1 return true else return false

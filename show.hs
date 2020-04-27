@@ -1,4 +1,7 @@
+module Show 
+    where
 import Control.Monad
+import Table_status
 import Data.List
 
 show_Gameover :: IO ()
@@ -12,7 +15,7 @@ show_Gameover = do
     putStrLn "                    "
     putStrLn "--------------------"
 
-show_table tb = show_table' 8 tb
+show_table tb = show_table' (table_size_y tb) tb
 
 show_table' 0 _ = return ()
 show_table' n tb =
@@ -20,10 +23,10 @@ show_table' n tb =
         putStrLn (show_row x y 1 (y-(n-1)) "" red black)
         show_table' (n-1) tb
     where
-        x = tb !! 0
-        y = tb !! 1
-        red = find_range (tb !! 2) (tb !! 3) (tb !! 8) ""
-        black = find_range (tb !! 4) (tb !! 5) (tb !! 8) ""
+        x = table_size_x tb
+        y = table_size_y tb
+        red = find_range (head_black tb) (tail_black tb) (size tb) ""
+        black = find_range (head_red tb) (tail_red tb) (size tb) ""
 
 find_range :: (Num a, Eq a, Show a) => a -> a -> a -> [Char] -> [Char]
 find_range h t s r 
@@ -59,3 +62,5 @@ show_row tbx tby x y r red black
 
     | otherwise = 
         (show_row tbx tby (x+1) y (r ++ "  ") red black)
+
+show_edge
