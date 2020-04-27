@@ -6,14 +6,21 @@ import Data.List
 
 show_Gameover :: IO ()
 show_Gameover = do
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "     Game  Over     "
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "--------------------"
+    putStrLn "                                                  "
+    putStrLn "             ####     #     #   # ####            "
+    putStrLn "            #        ##    ##  ## #               "
+    putStrLn "            #  ##   # #   # # # # ####            "
+    putStrLn "            #   #  ####  #  ##  # #               "
+    putStrLn "             ###  #   # #   #   # ####            "
+    putStrLn "                                                  "
+    putStrLn "                                                  "
+    putStrLn "             ###  #   # #### ####                 "
+    putStrLn "            #   # #  #  #    #   #                "
+    putStrLn "            #   # # #   #### ####                 "
+    putStrLn "            #   # ##    #    #  #                 "
+    putStrLn "             ###  #     #### #   #                "
+    putStrLn "                                                  "
+    putStrLn "                                                  "
 
 show_table tb = show_table' (table_size_y tb) tb
 
@@ -21,7 +28,11 @@ show_table' 0 _ = return ()
 show_table' n tb =
     do
         putStrLn (show_row x y 1 (y-(n-1)) "" red black)
-        putStrLn ("    +    +    +    +    +    +    +    ")        
+        if(n /= y) 
+            then 
+                putStrLn (show_edge_row (x-1)) 
+            else
+                putStrLn (show_last_row (x))        
         show_table' (n-1) tb
     where
         x = table_size_x tb
@@ -65,3 +76,12 @@ show_row tbx tby x y r red black
     | otherwise = 
         (show_row tbx tby (x+1) y (r ++ "     ") red black)
 
+show_edge_row n = show_edge_row' n ""
+    where 
+        show_edge_row' 0 r = r
+        show_edge_row' n r = show_edge_row' (n-1) (r++"    +")
+
+show_last_row n = show_lase_row' n ""
+    where
+        show_last_row' 0 r = r
+        show_last_row' n r = show_lase_row' (n-1) (r++"-----")
