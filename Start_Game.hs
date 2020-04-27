@@ -54,7 +54,7 @@ move_win_head current size
     | otherwise = current-1
 
 move_win_tail current head tail size
-    | head+1 == tail = current
+    | head-1 == tail = current
     | otherwise = move_win_head current size
 
 -- move_lose_head current head tail size
@@ -62,5 +62,5 @@ move_win_tail current head tail size
 --     | otherwise = move_win_head current size
 
 move_lose_tail current head size
-    | head+1 == current = move_win_head current size
+    | head-1 == current = move_win_head current size
     | otherwise = current
