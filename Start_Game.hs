@@ -4,9 +4,14 @@ import SPR_Module
 import Save_Load
 import Table_status
 
-gameover table = True
+-- game_over = 1 return true else return false
+-- gameover table = True
+gameover table
+    | (head_black table) == (head_red table) = True
+    | otherwise = False
 
-gen_table _ _ table = table
+--gen_table _ _ table = table
+gen_table length high = Table_status (length) (high) (length + high - 1) ((2*length) + high - 2) (1) (length) (0) (0) ((2*length) + (2*high) - 4)
 
 
 start_game = do
@@ -16,7 +21,7 @@ start_game = do
         do
         getlong <- get_long
         gethigh <- get_high
-        let table_status = gen_table get_long get_high table_status
+        let table_status = gen_table getlong gethigh
         print "Gen Game"
     else
         return()
