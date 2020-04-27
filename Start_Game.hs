@@ -24,16 +24,16 @@ start_game = do
         gethigh <- get_high
         let table_status = gen_table getlong gethigh
         print "Gen Game"
-        start_game
+        -- start_game
     else
         return()
-    let loop = do
-         getchoice <- get_choice
+    getchoice <- get_choice
     randomSPR <- random_spr
     let ck = spr getchoice randomSPR
     print randomSPR
-    -- let tb <- table_status
+        -- let tb <- table_status
     let table_status' = update_table ck table_status
+    print table_status
     show_table table_status'
     save table_status'
     case gameover table_status' of
@@ -42,10 +42,25 @@ start_game = do
    -- start the first iteration
 
 update_table ck tb 
-    | ck == "lose" = Table_status (table_size_x tb) (table_size_y tb) (head_black tb) (tail_black tb) (move (head_red tb) tb) (move (tail_red tb) tb) (game_over tb) ((turn tb)+1) (size tb)
-    | ck == "win" = Table_status (table_size_x tb) (table_size_y tb) (move (head_black tb) tb) (move (tail_black tb) tb) (head_red tb) (tail_red tb) (game_over tb) ((turn tb+1)) (size tb)
+    | ck == "lose" = Table_status (table_size_x tb) (table_size_y tb) (head_black tb) (move_lose_tail (tail_black tb) (head_red tb) (size tb)) (move_win_head (head_red tb) (size tb)) (move_win_tail (tail_red tb) (head_red tb) (tail_black tb) (size tb)) (game_over tb) ((turn tb)+1) (size tb)
+    | ck == "win" = Table_status (table_size_x tb) (table_size_y tb) (move_win_head (head_black tb) (size tb)) (move_win_tail (tail_black tb) (head_black tb) (tail_red tb) (size tb)) (head_red tb) (move_lose_tail (tail_red tb) (head_black tb) (size tb)) (game_over tb) ((turn tb+1)) (size tb)
     | ck == "draw" = Table_status (table_size_x tb) (table_size_y tb) (head_black tb) (tail_black tb) (head_red tb) (tail_red tb) (game_over tb) ((turn tb)+1) (size tb)
 
-move current tb
-    | current == 1 = size tb
+-- eaten ck tb
+--     | ck == 
+
+move_win_head current size
+    | current == 1 = size
     | otherwise = current-1
+
+move_win_tail current head tail size
+    | head+1 == tail = current
+    | otherwise = move_win_head current size
+
+-- move_lose_head current head tail size
+--     | head+1 == tail = current
+--     | otherwise = move_win_head current size
+
+move_lose_tail current head size
+    | head+1 == current = move_win_head current size
+    | otherwise = current

@@ -81,7 +81,7 @@ show_edge_row n = show_edge_row' n ""
         show_edge_row' 0 r = r
         show_edge_row' n r = show_edge_row' (n-1) (r++"    +")
 
-show_last_row n = show_lase_row' n ""
+show_last_row n = show_last_row' n ""
     where
         show_last_row' 0 r = r
-        show_last_row' n r = show_lase_row' (n-1) (r++"-----")
+        show_last_row' n r = show_last_row' (n-1) (r++"-----")
