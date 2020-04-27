@@ -18,6 +18,7 @@ show_table' 0 _ = return ()
 show_table' n tb =
     do
         putStrLn (show_row x y 1 (y-(n-1)) "" red black)
+        putStrLn ("    +    +    +    +    +    +    +    ")        
         show_table' (n-1) tb
     where
         x = tb !! 0
@@ -31,11 +32,12 @@ find_range h t s r
     | h == s = find_range 1 t s (r ++ "," ++show h)
     | otherwise = find_range (h+1) t s (r ++ "," ++ show h)
 
+
 show_bit :: (Num a, Show a) => a -> [Char] -> [Char] -> [Char]
 show_bit index red black
-    | isInfixOf ("," ++ (show index) ++ ",") red = "* "
-    | isInfixOf ("," ++ (show index) ++ ",") black = "+ "
-    | otherwise = "  "
+    | isInfixOf ("," ++ (show index) ++ ",") red = "  #  "
+    | isInfixOf ("," ++ (show index) ++ ",") black = "  o  "
+    | otherwise = "     "
 
 show_row :: (Num a, Eq a, Show a) => a -> a -> a -> a -> [Char] -> [Char] -> [Char] -> [Char] 
 show_row tbx tby x y r red black
@@ -58,4 +60,4 @@ show_row tbx tby x y r red black
         r ++ (show_bit (tbx + y - 1) red black)
 
     | otherwise = 
-        (show_row tbx tby (x+1) y (r ++ "  ") red black)
+        (show_row tbx tby (x+1) y (r ++ "     ") red black)
