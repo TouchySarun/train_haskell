@@ -32,7 +32,8 @@ start_game = do
         print randomSPR
         -- let tb <- table_status
         print table_status
-        -- let table_status = update_table ck table_status
+        let table_status' = update_table ck table_status
+        let table_status = table_status'
         case gameover table_status of
             False -> loop
             True -> print "End Game"
