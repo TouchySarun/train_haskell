@@ -30,17 +30,18 @@ start_game = do
         randomSPR <- random_spr
         let ck = spr getchoice randomSPR
         print randomSPR
-        -- update_table ck table_status
-        case ck of
-            "lose" -> loop
-            "draw" -> loop
-            "win" -> print "End Game"
+        -- let tb <- table_status
+        print table_status
+        -- let table_status = update_table ck table_status
+        case gameover table_status of
+            False -> loop
+            True -> print "End Game"
     loop  -- start the first iteration
 
 update_table ck tb 
     | ck == "lose" = Table_status (table_size_x tb) (table_size_y tb) (head_black tb) (tail_black tb) (move (head_red tb) tb) (move (tail_red tb) tb) (game_over tb) ((turn tb)+1) (size tb)
-    | ck == "win" = Table_status ((table_size_x tb)) (table_size_y tb) (move (head_black tb) tb) (move (tail_black tb) tb) (head_red tb) (tail_red tb) (game_over tb) ((turn tb+1)) (size tb)
-    | ck == "draw" = Table_status ((table_size_x tb)) (table_size_y tb) (head_black tb) (tail_black tb) (head_red tb) (tail_red tb) (game_over tb) ((turn tb)+1) (size tb)
+    | ck == "win" = Table_status (table_size_x tb) (table_size_y tb) (move (head_black tb) tb) (move (tail_black tb) tb) (head_red tb) (tail_red tb) (game_over tb) ((turn tb+1)) (size tb)
+    | ck == "draw" = Table_status (table_size_x tb) (table_size_y tb) (head_black tb) (tail_black tb) (head_red tb) (tail_red tb) (game_over tb) ((turn tb)+1) (size tb)
 
 move current tb
     | current == 1 = size tb
