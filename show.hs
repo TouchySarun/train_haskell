@@ -1,30 +1,44 @@
+module Show 
+    where
 import Control.Monad
+import Table_status
 import Data.List
 
 show_Gameover :: IO ()
 show_Gameover = do
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "     Game  Over     "
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "                    "
-    putStrLn "--------------------"
+    putStrLn "                                                  "
+    putStrLn "             ####     #     #   # ####            "
+    putStrLn "            #        ##    ##  ## #               "
+    putStrLn "            #  ##   # #   # # # # ####            "
+    putStrLn "            #   #  ####  #  ##  # #               "
+    putStrLn "             ###  #   # #   #   # ####            "
+    putStrLn "                                                  "
+    putStrLn "                                                  "
+    putStrLn "             ###  #   # #### ####                 "
+    putStrLn "            #   # #  #  #    #   #                "
+    putStrLn "            #   # # #   #### ####                 "
+    putStrLn "            #   # ##    #    #  #                 "
+    putStrLn "             ###  #     #### #   #                "
+    putStrLn "                                                  "
+    putStrLn "                                                  "
 
-show_table tb = show_table' 8 tb
+show_table tb = show_table' (table_size_y tb) tb
 
 show_table' 0 _ = return ()
 show_table' n tb =
     do
         putStrLn (show_row x y 1 (y-(n-1)) "" red black)
-        putStrLn ("    +    +    +    +    +    +    +    ")        
+        if(n /= y) 
+            then 
+                putStrLn (show_edge_row (x-1)) 
+            else
+                putStrLn (show_last_row (x))        
         show_table' (n-1) tb
     where
-        x = tb !! 0
-        y = tb !! 1
-        red = find_range (tb !! 2) (tb !! 3) (tb !! 8) ""
-        black = find_range (tb !! 4) (tb !! 5) (tb !! 8) ""
+        x = table_size_x tb
+        y = table_size_y tb
+        red = find_range (head_black tb) (tail_black tb) (size tb) ""
+        black = find_range (head_red tb) (tail_red tb) (size tb) ""
 
 find_range :: (Num a, Eq a, Show a) => a -> a -> a -> [Char] -> [Char]
 find_range h t s r 
@@ -61,3 +75,13 @@ show_row tbx tby x y r red black
 
     | otherwise = 
         (show_row tbx tby (x+1) y (r ++ "     ") red black)
+
+show_edge_row n = show_edge_row' n ""
+    where 
+        show_edge_row' 0 r = r
+        show_edge_row' n r = show_edge_row' (n-1) (r++"    +")
+
+show_last_row n = show_lase_row' n ""
+    where
+        show_last_row' 0 r = r
+        show_last_row' n r = show_lase_row' (n-1) (r++"-----")

@@ -47,3 +47,4 @@ update_table ck tb
 move current tb
     | current == 1 = size tb
     | otherwise = current-1
+    
