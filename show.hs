@@ -28,7 +28,7 @@ show_table' 0 _ = return ()
 show_table' n tb =
     do
         putStrLn (show_row x y 1 (y-(n-1)) "" red black)
-        if(n /= y) 
+        if(n /= 1) 
             then 
                 putStrLn (show_edge_row (x-1)) 
             else
