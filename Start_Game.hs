@@ -10,6 +10,8 @@ import System.IO
 -- gameover table = True
 gameover table
     | (head_black table) == (head_red table) = True
+    | (head_black table) == 0 = True
+    | (head_red table) == 0 = True
     | otherwise = False
 
 --gen_table _ _ table = table
@@ -67,7 +69,10 @@ start_game = do
         let ck = spr getchoice randomSPR
         print randomSPR
         -- let tb <- table_status
-        let table_status' = update_table ck table_status
+        let ts = update_table ck table_status
+
+        let table_status' = edit_if_over ts ck (gameover ts)
+
         show_table table_status'
 
         --Save File
@@ -108,3 +113,9 @@ move_win_tail current head tail size
 move_lose_tail current head size
     | move head size == current = move current size 
     | otherwise = current
+
+edit_if_over :: Table_status -> [Char] -> Bool -> Table_status
+edit_if_over ts ck False = ts
+edit_if_over ts ck True 
+    | ck == "win" = Table_status (table_size_x ts) (table_size_y ts) (head_black ts) (tail_black ts) (0) (0) (0) (turn ts) (size ts)
+    | ck == "lose" = Table_status (table_size_x ts) (table_size_y ts) (0) (0) (head_red ts) (tail_red ts) (0) (turn ts) (size ts)
